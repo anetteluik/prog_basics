@@ -39,6 +39,7 @@ function deleteAllTasks(event) {
     //    ul.removeChild(ul.firstChild)
     //}
     ul.innerHTML = ''
+    localStorage.removeItem('tasks')
     event.preventDefault()
 }
 
@@ -46,6 +47,22 @@ function deleteTask(event) {
     if (event.target.textContent === 'x') {
         if (confirm('Are you trying to delete this task?')) {
             event.target.parentElement.remove()
+
+            let liText = event.target.parentElement.textContent
+            let liTextCorrect = liText.slice(0, liText.length-1)
+
+            let tasks
+            if (localStorage.getItem('tasks') === null) {
+                tasks = []
+            } else {
+                tasks = JSON.parse(localStorage.getItem('tasks'))
+            }
+            tasks.forEach(function (task, index){
+                if(task === liTextCorrect){
+                    tasks.splice(index, 1)
+                }
+            })
+            localStorage.setItem('tasks', JSON.stringify(tasks))
         }
     }
 }
