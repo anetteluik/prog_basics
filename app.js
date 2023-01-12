@@ -4,6 +4,17 @@ form.addEventListener('submit', addTask)
 const ul = document.querySelector('ul')
 ul.addEventListener('click', deleteTask)
 
+const deleteTasks = document.querySelector('#clear-all-tasks')
+deleteTasks.addEventListener('click', deleteAllTasks)
+
+function deleteAllTasks(event) {
+    //while (ul.firstChild) {
+    //    ul.removeChild(ul.firstChild)
+    //}
+    ul.innerHTML = ''
+    event.preventDefault()
+}
+
 function deleteTask(event) {
     if (event.target.textContent === 'x') {
         if (confirm('Are you trying to delete this task?')) {
@@ -30,6 +41,16 @@ function addTask(event) {
 
     ul.appendChild(li)
 
-    document.querySelector('#task').value = ''
+    let tasks
+    if (localStorage.getItem('tasks') === null) {
+        tasks = []
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks'))
+    }
+    tasks.push(taskText)
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+
+
+    document.querySelector('#task_name').value = ''
     event.preventDefault()
 }
